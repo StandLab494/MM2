@@ -5,34 +5,53 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>KeySistem TSB</title>
 <style>
-*{box-sizing:border-box}body{margin:0;min-height:100vh;background:#080b10;color:#fff;font-family:Arial,sans-serif;display:flex;align-items:center;justify-content:center}
-.card{width:min(430px,92vw);padding:28px 22px;border:1px solid #202733;border-radius:22px;background:#0d1118;box-shadow:0 20px 60px #0008}
-h1{margin:0 0 22px;text-align:center;font-size:24px}.lock{display:inline-flex;margin-right:8px;width:28px;height:28px;align-items:center;justify-content:center}
-.warn{padding:16px;border-radius:14px;background:#151b24;color:#aeb7c6;line-height:1.45;font-size:14px}
-.progress{margin:20px 0 10px;color:#8f9aaa;font-size:13px}.bar{height:7px;background:#202733;border-radius:99px;overflow:hidden}.fill{width:0;height:100%;background:#2787ff;transition:.3s}
-button{width:100%;margin-top:24px;padding:15px;border:0;border-radius:13px;background:#1877f2;color:#fff;font-weight:700;font-size:16px;cursor:pointer}button:disabled{opacity:.7}
-.keybox{display:none;margin-top:20px;padding:16px;border-radius:14px;background:#151b24;text-align:center}.key{font-family:monospace;word-break:break-all;color:#62a9ff;font-size:16px}.copy{margin-top:14px}
-select{width:100%;margin-top:18px;padding:12px;border-radius:10px;background:#111722;color:#fff;border:1px solid #283141}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:#070a0f;color:#fff;font-family:Arial,Helvetica,sans-serif;display:flex;align-items:center;justify-content:center;padding:18px}
+.card{width:min(420px,94vw);padding:28px 22px 24px;border:1px solid #202733;border-radius:24px;background:#0d1118;box-shadow:0 22px 60px #0009}
+.top{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:22px}.title-lock{width:48px;height:48px;object-fit:contain;flex:0 0 auto}h1{margin:0;font-size:25px;line-height:1.1}
+.warn{padding:16px;border-radius:15px;background:#151b24;color:#aeb7c6;line-height:1.5;font-size:14px}
+.select-wrap{margin-top:16px}label{display:block;margin:0 0 8px;color:#8f9aaa;font-size:13px}
+select{width:100%;padding:13px 14px;border-radius:12px;background:#111722;color:#fff;border:1px solid #283141;font-size:15px}
+.progress{margin:20px 0 10px;color:#8f9aaa;font-size:13px}.bar{height:7px;background:#202733;border-radius:99px;overflow:hidden}.fill{height:100%;width:0;background:#2787ff;transition:width .45s ease}
+.asset-btn{position:relative;width:100%;max-width:328px;height:83px;margin:22px auto 0;border:0;padding:0;display:block;background:url("assets/bluebutton_blank.webp") center/100% 100% no-repeat;color:#fff;cursor:pointer;font-size:16px;font-weight:700}
+.asset-btn span{position:absolute;left:84px;right:58px;top:50%;transform:translateY(-50%);white-space:nowrap;text-align:center}.asset-btn:active{transform:translateY(1px)}
+.asset-btn:disabled{opacity:.72;cursor:default}.screen{display:block}.hidden{display:none}
+.loading{text-align:center;color:#c0c8d4;padding:10px 0 2px}.spinner{width:46px;height:46px;border:4px solid #202733;border-top-color:#2787ff;border-radius:50%;margin:16px auto 14px;animation:spin .9s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.keybox{margin-top:18px;padding:17px;border-radius:15px;background:#151b24}.key-label{color:#8f9aaa;font-size:13px;margin-bottom:8px}
+.key{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:16px;color:#62a9ff;word-break:break-all;line-height:1.45}
+.copy-btn.success{background:#bfeedd;color:#1aa66b;border-radius:42px}.copy-btn.success span{left:0;right:0;font-weight:700}
+.note{margin-top:14px;color:#697487;font-size:12px;line-height:1.45;text-align:center}
+@media (max-width:420px){.card{padding:24px 16px 20px}.title-lock{width:44px;height:44px}h1{font-size:23px}.asset-btn{max-width:100%}.asset-btn span{left:75px;right:48px}}
 </style>
 </head>
 <body>
 <main class="card">
-<h1><span class="lock">🔒</span>KeySistem TSB</h1>
-<div class="warn">Получите тестовый ключ для интерфейса. Этот генератор демонстрационный и не подключается к сторонним скриптам или сервисам.</div>
-<select id="type"><option value="PRO">PRO</option><option value="ULTRA">ULTRA</option></select>
-<div class="progress" id="progress">Выполнено 0 из 1</div>
-<div class="bar"><div class="fill" id="fill"></div></div>
-<button id="generate">Получить ключ</button>
-<div class="keybox" id="keybox">
-<div class="key" id="key"></div>
-<button class="copy" id="copy">Скопировать ключ</button>
-</div>
+<section id="landing" class="screen">
+<div class="top"><img class="title-lock" src="assets/lock.webp" alt=""><h1>KeySistem TSB</h1></div>
+<div class="warn">Получите тестовый ключ для интерфейса. Генератор работает локально в браузере и не подключается к сторонним скриптам или сервисам.</div>
+<div class="select-wrap"><label for="type">Тип ключа</label><select id="type"><option value="PRO">PRO</option><option value="ULTRA">ULTRA</option></select></div>
+<div class="progress" id="progress">Выполнено 0 из 1</div><div class="bar"><div class="fill" id="fill"></div></div>
+<button class="asset-btn" id="generate" type="button"><span>Получить ключ</span></button>
+</section>
+<section id="loading" class="screen hidden">
+<div class="top"><img class="title-lock" src="assets/lock.webp" alt=""><h1>KeySistem TSB</h1></div>
+<div class="loading">Создаём ключ…</div><div class="spinner"></div>
+<div class="progress">Выполнено <span id="loadCount">0</span> из 1</div><div class="bar"><div class="fill" id="loadFill"></div></div>
+</section>
+<section id="result" class="screen hidden">
+<div class="top"><img class="title-lock" src="assets/lock.webp" alt=""><h1>KeySistem TSB</h1></div>
+<div class="keybox"><div class="key-label">Ваш тестовый ключ</div><div class="key" id="key"></div></div>
+<button class="asset-btn copy-btn" id="copy" type="button"><span>Скопировать ключ</span></button>
+<div class="note">Ключ сгенерирован для демонстрации интерфейса.</div>
+</section>
 </main>
 <script>
 const chars="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-function makeKey(type){let p="";for(let i=0;i<5;i++)p+=chars[Math.floor(Math.random()*chars.length)];return type+"_RR-VC-2026-"+p}
-generate.onclick=()=>{generate.disabled=true;progress.textContent="Выполнено 0 из 1";fill.style.width="0";setTimeout(()=>{key.textContent=makeKey(type.value);fill.style.width="100%";progress.textContent="Выполнено 1 из 1";keybox.style.display="block";generate.textContent="Ключ создан";generate.disabled=false},700)}
-copy.onclick=async()=>{await navigator.clipboard.writeText(key.textContent);copy.textContent="Код принят";setTimeout(()=>copy.textContent="Скопировать ключ",1200)}
+function makeKey(type){let part="";for(let i=0;i<5;i++)part+=chars[Math.floor(Math.random()*chars.length)];return type+"_RR-VC-2026-"+part}
+const landing=document.getElementById("landing"),loading=document.getElementById("loading"),result=document.getElementById("result"),type=document.getElementById("type"),generate=document.getElementById("generate"),loadFill=document.getElementById("loadFill"),loadCount=document.getElementById("loadCount"),keyEl=document.getElementById("key"),copy=document.getElementById("copy");
+generate.addEventListener("click",()=>{generate.disabled=true;landing.classList.add("hidden");loading.classList.remove("hidden");let p=0;loadFill.style.width="0%";loadCount.textContent="0";const timer=setInterval(()=>{p+=10;loadFill.style.width=p+"%";if(p>=100){clearInterval(timer);loadCount.textContent="1";setTimeout(()=>{keyEl.textContent=makeKey(type.value);loading.classList.add("hidden");result.classList.remove("hidden")},250)}},80)});
+copy.addEventListener("click",async()=>{try{await navigator.clipboard.writeText(keyEl.textContent);copy.classList.add("success");copy.querySelector("span").textContent="Код принят";setTimeout(()=>{copy.classList.remove("success");copy.querySelector("span").textContent="Скопировать ключ"},1400)}catch(e){copy.querySelector("span").textContent="Не удалось скопировать";setTimeout(()=>copy.querySelector("span").textContent="Скопировать ключ",1400)}});
 </script>
 </body>
 </html>
