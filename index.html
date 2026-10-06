@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KeySistem TSB</title>
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:#080b10;color:#fff;font-family:Arial,sans-serif;display:flex;align-items:center;justify-content:center}
+.card{width:min(430px,92vw);padding:28px 22px;border:1px solid #202733;border-radius:22px;background:#0d1118;box-shadow:0 20px 60px #0008}
+h1{margin:0 0 22px;text-align:center;font-size:24px}.lock{display:inline-flex;margin-right:8px;width:28px;height:28px;align-items:center;justify-content:center}
+.warn{padding:16px;border-radius:14px;background:#151b24;color:#aeb7c6;line-height:1.45;font-size:14px}
+.progress{margin:20px 0 10px;color:#8f9aaa;font-size:13px}.bar{height:7px;background:#202733;border-radius:99px;overflow:hidden}.fill{width:0;height:100%;background:#2787ff;transition:.3s}
+button{width:100%;margin-top:24px;padding:15px;border:0;border-radius:13px;background:#1877f2;color:#fff;font-weight:700;font-size:16px;cursor:pointer}button:disabled{opacity:.7}
+.keybox{display:none;margin-top:20px;padding:16px;border-radius:14px;background:#151b24;text-align:center}.key{font-family:monospace;word-break:break-all;color:#62a9ff;font-size:16px}.copy{margin-top:14px}
+select{width:100%;margin-top:18px;padding:12px;border-radius:10px;background:#111722;color:#fff;border:1px solid #283141}
+</style>
+</head>
+<body>
+<main class="card">
+<h1><span class="lock">🔒</span>KeySistem TSB</h1>
+<div class="warn">Получите тестовый ключ для интерфейса. Этот генератор демонстрационный и не подключается к сторонним скриптам или сервисам.</div>
+<select id="type"><option value="PRO">PRO</option><option value="ULTRA">ULTRA</option></select>
+<div class="progress" id="progress">Выполнено 0 из 1</div>
+<div class="bar"><div class="fill" id="fill"></div></div>
+<button id="generate">Получить ключ</button>
+<div class="keybox" id="keybox">
+<div class="key" id="key"></div>
+<button class="copy" id="copy">Скопировать ключ</button>
+</div>
+</main>
+<script>
+const chars="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+function makeKey(type){let p="";for(let i=0;i<5;i++)p+=chars[Math.floor(Math.random()*chars.length)];return type+"_RR-VC-2026-"+p}
+generate.onclick=()=>{generate.disabled=true;progress.textContent="Выполнено 0 из 1";fill.style.width="0";setTimeout(()=>{key.textContent=makeKey(type.value);fill.style.width="100%";progress.textContent="Выполнено 1 из 1";keybox.style.display="block";generate.textContent="Ключ создан";generate.disabled=false},700)}
+copy.onclick=async()=>{await navigator.clipboard.writeText(key.textContent);copy.textContent="Код принят";setTimeout(()=>copy.textContent="Скопировать ключ",1200)}
+</script>
+</body>
+</html>
